@@ -3,7 +3,7 @@ from random import uniform
 import time
 
 
-client = mqtt.Client("Haushaltsgerät")
+client = mqtt.Client("Planungsalgorithmus")
 client.connect("localhost", 1883)   # normalerweise hier ip-adresse vom mosquitto Broker
 
 #   Alternative für anderen Broker wenn 'localhost' nicht funktioniert:
@@ -18,9 +18,5 @@ while True:
     randNumber = uniform(30.0, 150.0)        # Dauer Spülmaschine / Waschmaschine in Minuten
     client.publish("Dauer", randNumber)
     print("Just published " + str(randNumber) + " Minuten to topic Dauer")
-
-    randNumber = uniform(0.0, 23.9)
-    client.publish("MaxStartzeitpunkt", randNumber)
-    print("Just published " + str(randNumber) + " Uhr to topic MaxStartzeitpunkt")
 
     time.sleep(5)
