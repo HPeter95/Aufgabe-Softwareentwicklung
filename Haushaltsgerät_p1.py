@@ -1,7 +1,19 @@
 import paho.mqtt.client as mqtt
 from random import uniform
-import time
+import time, random
+from datetime import datetime, timedelta
 
+# Aktuelle Uhrzeit
+Uhrzeit = datetime.now()
+
+# Zufällige Uhrzeit zwischen jetzt und in genau 2 Tagen
+random_Uhrzeit = Uhrzeit + timedelta(days=random.randint(0, 2),
+                              hours=random.randint(0, 23),
+                              minutes=random.randint(0, 59),
+                              seconds=random.randint(0, 59))
+
+# Konvertieren von random_Uhrzeit in Unix timestamp Format
+random_Uhrzeit_Unix = int(time.mktime(random_Uhrzeit.timetuple()))
 
 client = mqtt.Client("Haushaltsgerät")
 client.connect("localhost", 1883)   # normalerweise hier ip-adresse vom mosquitto Broker
@@ -19,8 +31,7 @@ while True:
     client.publish("Dauer", randNumber)
     print("Just published " + str(randNumber) + " Minuten to topic Dauer")
 
-    randNumber = uniform(0.0, 23.9)
-    client.publish("MaxStartzeitpunkt", randNumber)
-    print("Just published " + str(randNumber) + " Uhr to topic MaxStartzeitpunkt")
+    client.publish("MaxStartzeitpunkt", random_Uhrzeit_Unix)
+    print("Just published " + str(random_Uhrzeit_Unix) + " in Sekunden to topic MaxStartzeitpunkt")
 
     time.sleep(5)
