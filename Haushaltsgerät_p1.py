@@ -3,8 +3,14 @@ from random import uniform
 import time, random
 from datetime import datetime, timedelta
 
+
 def on_message(client, userdata, message):
     print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
+
+    if message.topic == "Startzeitpunkt":
+        Startzeitpunkt_Unix = float(message.payload.decode())
+        Startzeitpunkt_readable = datetime.fromtimestamp(Startzeitpunkt_Unix)
+        print("Der optimale Startzeitpunkt ist", Startzeitpunkt_readable)
 
 # Aktuelle Uhrzeit
 Uhrzeit = datetime.now()
