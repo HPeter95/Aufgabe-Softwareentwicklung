@@ -5,6 +5,7 @@ import json
 value1 = 0
 value2 = 0
 
+# aktuelle Uhrzeit
 now = time.time()
 
 def on_message(client, userdata, message):
@@ -17,6 +18,7 @@ def on_message(client, userdata, message):
     elif message.topic == "Dauer":
         value2 = float(message.payload.decode())
 
+    # Array "Wetterdaten" durch MaxStartzeitpunkt begrenzen und maximalen Sonnenindex auslesen
     elif message.topic == "Wetterdaten":
         wetterdaten = json.loads(message.payload.decode("utf-8"))
         wetterdaten_MaxStartzeitpunkt = [sub_array for sub_array in wetterdaten if now <= sub_array[0] <= MaxStartzeitpunkt]
