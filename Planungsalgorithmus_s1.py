@@ -23,14 +23,17 @@ def on_message(client, userdata, message):
         max_second_split = max(x[1] for x in wetterdaten_MaxStartzeitpunkt)
         for sub_array in wetterdaten_MaxStartzeitpunkt:
             if sub_array[1] == max_second_split:
-                print("Der Zeitpunkt des meisten Photovoltaikstroms im Netz ist ", sub_array[0])
+                print("Der Zeitpunkt des meisten Photovoltaikstroms im Netz bis spätestens", MaxStartzeitpunkt, " ist ", sub_array[0])
+                client.publish("Startzeitpunkt", sub_array[0])
 
-
+    # Publishen des spätesten Startzeitpunktes "2" an den Wetterserver, da der Planungsalgorithmus
+    # den Zeitpunkt weitergeben soll, nicht das Haushaltsgerät
     elif message.topic == "MaxStartzeitpunkt":
         MaxStartzeitpunkt = float(message.payload.decode())
         client.publish("MaxStartzeitpunkt2",  MaxStartzeitpunkt)
-        # "2" da der Planungsalgorithmus den Zeitpunkt weitergeben soll, nicht das Haushaltsgerät
         print("Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt")
+
+    # Hier die Berechnung des Stromverbrauchs
     if value1 != 0 and value2 != 0:  # sonst wird direkt zu Anfang result = 0 ausgespuckt
         result = value1 * value2
         print("Result:", result)

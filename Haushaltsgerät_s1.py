@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import time
 
 def on_message(client, userdata, message):
-    print("received message: " ,str(message.payload.decode("utf-8")))
+    print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
 #   Alternative für anderen Broker wenn 'localhost' nicht funktioniert:
 #   mqttBroker ="mqtt.eclipseprojects.io"

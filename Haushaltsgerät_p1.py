@@ -3,6 +3,9 @@ from random import uniform
 import time, random
 from datetime import datetime, timedelta
 
+def on_message(client, userdata, message):
+    print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
+
 # Aktuelle Uhrzeit
 Uhrzeit = datetime.now()
 
@@ -17,6 +20,9 @@ random_Uhrzeit_Unix = int(time.mktime(random_Uhrzeit.timetuple()))
 
 client = mqtt.Client("Haushaltsgerät")
 client.connect("localhost", 1883)   # normalerweise hier ip-adresse vom mosquitto Broker
+client.loop_start()
+client.subscribe("Startzeitpunkt")
+client.on_message = on_message
 
 #   Alternative für anderen Broker wenn 'localhost' nicht funktioniert:
 #   mqttBroker ="mqtt.eclipseprojects.io"
@@ -35,3 +41,4 @@ while True:
     print("Just published " + str(random_Uhrzeit_Unix) + " in Sekunden to topic MaxStartzeitpunkt")
 
     time.sleep(5)
+
