@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import json
+from datetime import datetime
 
 value1 = 0
 value2 = 0
@@ -13,13 +14,13 @@ def on_message(client, userdata, message):
 
     print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
-    if message.topic == "Leistung":
-        value1 = float(message.payload.decode())
-    elif message.topic == "Dauer":
-        value2 = float(message.payload.decode())
+    Client_Topics_Array = json.loads(message.payload.decode("utf-8"))
+    print(f"Die Leistung von {client._client_id.decode()}beträgt {Client_Topics_Array[0]}")
+    print(f"Die Dauer von {client._client_id.decode()}beträgt {Client_Topics_Array[1]}")
+    print(f"Der späteste Startzeitpunkt beträgt {datetime.fromtimestamp(Client_Topics_Array[2])}")
 
     # Array "Wetterdaten" durch MaxStartzeitpunkt begrenzen und maximalen Sonnenindex auslesen
-    elif message.topic == "Wetterdaten":
+    if message.topic == "Wetterdaten":
         wetterdaten = json.loads(message.payload.decode("utf-8"))
         wetterdaten_MaxStartzeitpunkt = [sub_array for sub_array in wetterdaten if now <= sub_array[0] <= MaxStartzeitpunkt]
         max_second_split = max(x[1] for x in wetterdaten_MaxStartzeitpunkt)
@@ -52,9 +53,6 @@ client.connect("localhost", 1883)  # normalerweise hier ip-adresse vom mosquitto
 client.loop_start()
 
 client.subscribe("Topics_Client_1")
-client.subscribe("Leistung")
-client.subscribe("Dauer")
-client.subscribe("MaxStartzeitpunkt")
 client.subscribe("Wetterdaten")
 client.on_message = on_message
 

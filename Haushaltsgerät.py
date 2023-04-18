@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 from random import uniform
 import time, random
+import json
 from datetime import datetime, timedelta
 
 
@@ -35,16 +36,21 @@ client.on_message = on_message
 #   client.connect(mqttBroker)
 
 while True:
-    randNumber = uniform(1000.0, 3000.0)        # Leistung Spülmaschine / Waschmaschine in Watt
-    client.publish("Leistung", randNumber)
-    print("Just published " + str(randNumber) + " Watt to topic Leistung")
+    randNumber1 = uniform(1000.0, 3000.0)        # Leistung Spülmaschine / Waschmaschine in Watt
+   # client.publish("Leistung", randNumber1)
+    print("Just published " + str(randNumber1) + " Watt to topic Leistung")
 
-    randNumber = uniform(30.0, 150.0)        # Dauer Spülmaschine / Waschmaschine in Minuten
-    client.publish("Dauer", randNumber)
-    print("Just published " + str(randNumber) + " Minuten to topic Dauer")
+    randNumber2 = uniform(30.0, 150.0)        # Dauer Spülmaschine / Waschmaschine in Minuten
+   # client.publish("Dauer", randNumber2)
+    print("Just published " + str(randNumber2) + " Minuten to topic Dauer")
 
-    client.publish("MaxStartzeitpunkt", random_Uhrzeit_Unix)
+    #client.publish("MaxStartzeitpunkt", random_Uhrzeit_Unix)
     print("Just published " + str(random_Uhrzeit_Unix) + " in Sekunden to topic MaxStartzeitpunkt")
+
+# Topics zu Json formatieren
+    Topics_Client_1 = [randNumber1, randNumber2, random_Uhrzeit_Unix]
+    Topics_Client_1_json = json.dumps(Topics_Client_1)
+    client.publish("Topics_Client_1", Topics_Client_1_json)
 
     time.sleep(5)
 
