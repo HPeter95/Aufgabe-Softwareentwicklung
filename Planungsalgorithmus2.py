@@ -15,9 +15,15 @@ def on_message(client, userdata, message):
     print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
     Client_Topics_Array = json.loads(message.payload.decode("utf-8"))
-    print(f"Die Leistung von {client._client_id.decode()}beträgt {Client_Topics_Array[0]}")
-    print(f"Die Dauer von {client._client_id.decode()}beträgt {Client_Topics_Array[1]}")
-    print(f"Der späteste Startzeitpunkt beträgt {datetime.fromtimestamp(Client_Topics_Array[2])}")
+    print(f"Die Leistung von {client._client_id.decode()} beträgt {Client_Topics_Array[0]}")
+    print(f"Die Dauer von {client._client_id.decode()} beträgt {Client_Topics_Array[1]}")
+    print(f"Der späteste Startzeitpunkt lautet {datetime.fromtimestamp(Client_Topics_Array[2])}")
+    MaxStartzeitpunkt = int(Client_Topics_Array[2])
+
+    # Sobald dieses Topic gepublished wird, ist die Variable plötzlich eine list und kein integer mehr und es gibt einen Error.
+    #client.publish("MaxStartzeitpunkt2", MaxStartzeitpunkt)
+    print("Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt")
+
 
     # Array "Wetterdaten" durch MaxStartzeitpunkt begrenzen und maximalen Sonnenindex auslesen
     if message.topic == "Wetterdaten":
@@ -31,10 +37,10 @@ def on_message(client, userdata, message):
 
     # Publishen des spätesten Startzeitpunktes "2" an den Wetterserver, da der Planungsalgorithmus
     # den Zeitpunkt weitergeben soll, nicht das Haushaltsgerät
-    elif message.topic == "MaxStartzeitpunkt":
-        MaxStartzeitpunkt = float(message.payload.decode())
-        client.publish("MaxStartzeitpunkt2",  MaxStartzeitpunkt)
-        print("Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt")
+    #elif message.topic == "MaxStartzeitpunkt":
+    #    MaxStartzeitpunkt = float(message.payload.decode())
+    #    client.publish("MaxStartzeitpunkt2",  MaxStartzeitpunkt)
+    #    print("Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt")
 
     # Hier die Berechnung des Stromverbrauchs
     #if value1 != 0 and value2 != 0:  # sonst wird direkt zu Anfang result = 0 ausgespuckt

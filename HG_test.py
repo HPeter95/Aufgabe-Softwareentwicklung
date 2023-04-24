@@ -25,7 +25,7 @@ random_Uhrzeit = Uhrzeit + timedelta(days=random.randint(0, 2),
                               seconds=random.randint(0, 59))
 
 # Konvertieren von random_Uhrzeit in Unix timestamp Format
-random_Uhrzeit_Unix = int(time.mktime(random_Uhrzeit.timetuple()))
+random_Uhrzeit_Unix = 300
 
 client = mqtt.Client("Haushaltsgerät")
 client.connect("localhost", 1883)   # normalerweise hier ip-adresse vom mosquitto Broker
@@ -38,11 +38,11 @@ client.on_message = on_message
 #   client.connect(mqttBroker)
 
 while True:
-    randNumber1 = uniform(1000, 3000)        # Leistung Spülmaschine / Waschmaschine in Watt
+    randNumber1 = 50      # Leistung Spülmaschine / Waschmaschine in Watt
    # client.publish("Leistung", randNumber1)
     print("Just published " + str(randNumber1) + " Watt to topic Leistung")
 
-    randNumber2 = uniform(30, 150)        # Dauer Spülmaschine / Waschmaschine in Minuten
+    randNumber2 = 100      # Dauer Spülmaschine / Waschmaschine in Minuten
    # client.publish("Dauer", randNumber2)
     print("Just published " + str(randNumber2) + " Minuten to topic Dauer")
 
