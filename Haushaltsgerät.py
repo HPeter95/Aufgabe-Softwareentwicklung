@@ -5,10 +5,10 @@ import json
 from datetime import datetime, timedelta
 
 
-
+Client_Name = "Haushaltsgerät_1"
 
 def on_message(client, userdata, message):
-    print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
+    print(f"Received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
     if message.topic == "Startzeitpunkt":
         Startzeitpunkt_Unix = float(message.payload.decode())
@@ -50,7 +50,7 @@ while True:
     print("Just published " + str(random_Uhrzeit_Unix) + " in Sekunden to topic MaxStartzeitpunkt")
 
 # Topics zu Json formatieren
-    Topics_Client_1 = [randNumber1, randNumber2, random_Uhrzeit_Unix]
+    Topics_Client_1 = [Client_Name, randNumber1, randNumber2, random_Uhrzeit_Unix]
     Topics_Client_1_json = json.dumps(Topics_Client_1)
     client.publish("Topics_Client_1", Topics_Client_1_json)
 

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 current_time = datetime.now()
 def on_message(client, userdata, message):
-    print("received message: " ,str(message.payload.decode("utf-8")))
+    print("Received message: " ,str(message.payload.decode("utf-8")))
     client.publish("Wetterdaten", Wetterdaten_json)
     print("Just published " + str(Wetterdaten_json) + " to topic Wetterdaten")
 

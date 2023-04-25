@@ -12,17 +12,16 @@ now = time.time()
 def on_message(client, userdata, message):
     global value1, value2, wetterdaten, MaxStartzeitpunkt,wetterdaten_MaxStartzeitpunkt  # damit die Werte der topics separat angesteuert werden können
 
-    print(f"received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
+    print(f"Received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
-    Client_Topics_Array = json.loads(message.payload.decode("utf-8"))
-    print(f"Die Leistung von {client._client_id.decode()} beträgt {Client_Topics_Array[0]}")
-    print(f"Die Dauer von {client._client_id.decode()} beträgt {Client_Topics_Array[1]}")
-    print(f"Der späteste Startzeitpunkt lautet {datetime.fromtimestamp(Client_Topics_Array[2])}")
-    MaxStartzeitpunkt = int(Client_Topics_Array[2])
-
-    # Sobald dieses Topic gepublished wird, ist die Variable plötzlich eine list und kein integer mehr und es gibt einen Error.
-    #client.publish("MaxStartzeitpunkt2", MaxStartzeitpunkt)
-    print("Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt")
+    if message.topic == "Topics_Client_1":
+        Client_Topics_Array = json.loads(message.payload.decode("utf-8"))
+        print(f"Die Leistung von {Client_Topics_Array[0]} beträgt {Client_Topics_Array[1]}")
+        print(f"Die Dauer von {Client_Topics_Array[0]} beträgt {Client_Topics_Array[2]}")
+        print(f"Der späteste Startzeitpunkt von {Client_Topics_Array[0]} lautet {datetime.fromtimestamp(Client_Topics_Array[3])}")
+        MaxStartzeitpunkt = int(Client_Topics_Array[3])
+        client.publish("MaxStartzeitpunkt2", MaxStartzeitpunkt)
+        print('Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt an "Wetterserver"')
 
 
     # Array "Wetterdaten" durch MaxStartzeitpunkt begrenzen und maximalen Sonnenindex auslesen
@@ -34,13 +33,6 @@ def on_message(client, userdata, message):
             if sub_array[1] == max_second_split:
                 print("Der Zeitpunkt des meisten Photovoltaikstroms im Netz bis spätestens", MaxStartzeitpunkt, " ist ", sub_array[0])
                 client.publish("Startzeitpunkt", sub_array[0])
-
-    # Publishen des spätesten Startzeitpunktes "2" an den Wetterserver, da der Planungsalgorithmus
-    # den Zeitpunkt weitergeben soll, nicht das Haushaltsgerät
-    #elif message.topic == "MaxStartzeitpunkt":
-    #    MaxStartzeitpunkt = float(message.payload.decode())
-    #    client.publish("MaxStartzeitpunkt2",  MaxStartzeitpunkt)
-    #    print("Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt")
 
     # Hier die Berechnung des Stromverbrauchs
     #if value1 != 0 and value2 != 0:  # sonst wird direkt zu Anfang result = 0 ausgespuckt
