@@ -14,14 +14,14 @@ def on_message(client, userdata, message):
 
     print(f"Received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
-    if message.topic == "Topics_Client_1":
+    if "Topics_Client" in message.topic:
         Client_Topics_Array = json.loads(message.payload.decode("utf-8"))
         print(f"Die Leistung von {Client_Topics_Array[0]} beträgt {Client_Topics_Array[1]}")
         print(f"Die Dauer von {Client_Topics_Array[0]} beträgt {Client_Topics_Array[2]}")
         print(f"Der späteste Startzeitpunkt von {Client_Topics_Array[0]} lautet {datetime.fromtimestamp(Client_Topics_Array[3])}")
         MaxStartzeitpunkt = int(Client_Topics_Array[3])
         client.publish("MaxStartzeitpunkt2", MaxStartzeitpunkt)
-        print('Just published " + str(MaxStartzeitpunkt) + " als spätester Startzeitpunkt an "Wetterserver"')
+        print('Just published ' + str(MaxStartzeitpunkt) + ' als spätester Startzeitpunkt an "Wetterserver"')
 
 
     # Array "Wetterdaten" durch MaxStartzeitpunkt begrenzen und maximalen Sonnenindex auslesen
