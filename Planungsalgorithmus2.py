@@ -14,6 +14,7 @@ def on_message(client, userdata, message):
 
     print(f"Received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
+    # Alle Clients die den Namen Topic_Client_X tragen werden hier verarbeitet:
     if "Topics_Client" in message.topic:
         Client_Topics_Array = json.loads(message.payload.decode("utf-8"))
         print(f"Die Leistung von {Client_Topics_Array[0]} beträgt {Client_Topics_Array[1]}")

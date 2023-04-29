@@ -5,8 +5,6 @@ import json
 from datetime import datetime, timedelta
 
 
-Client_Name = "Haushaltsgerät_1"
-
 def on_message(client, userdata, message):
     print(f"Received message: {str(message.payload.decode('utf-8'))} on topic: {message.topic}")
 
@@ -27,7 +25,7 @@ random_Uhrzeit = Uhrzeit + timedelta(days=random.randint(0, 2),
 # Konvertieren von random_Uhrzeit in Unix timestamp Format
 random_Uhrzeit_Unix = int(time.mktime(random_Uhrzeit.timetuple()))
 
-client = mqtt.Client("Haushaltsgerät")
+client = mqtt.Client("Haushaltsgerät_1")
 client.connect("localhost", 1883)   # normalerweise hier ip-adresse vom mosquitto Broker
 client.loop_start()
 client.subscribe("Startzeitpunkt")
@@ -39,15 +37,14 @@ client.on_message = on_message
 
 while True:
     randNumber1 = uniform(1000, 3000)        # Leistung Spülmaschine / Waschmaschine in Watt
-   # client.publish("Leistung", randNumber1)
     print("Just published " + str(randNumber1) + " Watt to topic Leistung")
 
     randNumber2 = uniform(30, 150)        # Dauer Spülmaschine / Waschmaschine in Minuten
-   # client.publish("Dauer", randNumber2)
     print("Just published " + str(randNumber2) + " Minuten to topic Dauer")
 
-    #client.publish("MaxStartzeitpunkt", random_Uhrzeit_Unix)
     print("Just published " + str(random_Uhrzeit_Unix) + " in Sekunden to topic MaxStartzeitpunkt")
+
+    Client_Name = "Haushaltsgerät_1"
 
 # Topics zu Json formatieren
     Topics_Client_1 = [Client_Name, randNumber1, randNumber2, random_Uhrzeit_Unix]
